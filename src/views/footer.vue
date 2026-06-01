@@ -17,7 +17,7 @@ const navigate = (page) => {
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- About Section -->
         <div class="footer-section">
-          <h3 class="text-xl font-bold mb-4">TEMBERA U RWANDA</h3>
+          <h3 class="text-xl font-bold mb-4"> TEMBERA U RWANDA</h3>
           <p class="text-green-50 text-sm leading-relaxed">
             Discover the beauty and wonder of Rwanda. Explore our lush landscapes, vibrant culture, and unforgettable experiences across the country's stunning regions.
           </p>
@@ -75,7 +75,7 @@ const navigate = (page) => {
       <!-- Footer Bottom -->
       <div class="flex flex-col md:flex-row justify-between items-center">
         <p class="text-green-50 text-sm">
-          © 2026 TEMBERA U RWANDA. All rights reserved.
+          © 2026 TEMBERA U RWANDA. All rights reserved. cyuzuzo prince nathan
         </p>
         <p class="text-green-50 text-xs mt-4 md:mt-0">
           Experience Rwanda • Explore Nature • Create Memories
