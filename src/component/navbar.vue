@@ -43,7 +43,6 @@ const selectLanguage = (lang) => {
 
 const navigate = (page) => { emit('navigate', page) }
 
-// Close dropdown when clicking outside
 const closeLang = (e) => {
   if (!e.target.closest('.language-selector')) isLangOpen.value = false
 }
@@ -57,7 +56,7 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
     
     <ul class="links">
       <li v-for="item in navItems" :key="item.id" class="nav-item-container">
-        <!-- FIXED: Only call navigate() if there are NO children -->
+        <!-- Logic: If item has children, don't trigger navigate on the parent click -->
         <button 
           @click="item.children ? null : navigate(item.id)" 
           :class="{ active: currentPage === item.id, 'no-click': item.children }" 
@@ -68,7 +67,6 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
         
         <ul v-if="item.children" class="dropdown-menu">
           <li v-for="child in item.children" :key="child.id">
-            <!-- Child links still navigate as normal -->
             <button @click.stop="navigate(child.id)" class="dropdown-item" :class="{ 'active-sub': currentPage === child.id }">
               {{ child.label }}
             </button>
@@ -77,7 +75,6 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
       </li>
     </ul>
 
-    <!-- Modern Language Selector -->
     <div class="language-selector">
       <button @click.stop="isLangOpen = !isLangOpen" class="lang-btn">
         <span>{{ selectedLanguage.flag }}</span>
@@ -106,22 +103,48 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
 
 /* Navigation Links */
 .links { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
-.nav-item-container { position: relative; }
+.nav-item-container { position: relative; padding-bottom: 5px; /* Tiny buffer to keep hover active */ }
+
 .nav-link { background: none; border: none; color: rgba(255, 255, 255, 0.9); cursor: pointer; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
 .nav-link:hover { background-color: rgba(255, 255, 255, 0.1); color: white; }
 .nav-link.active { background-color: #22c55e; color: white; }
 
-/* FIXED: Prevent the mouse cursor from looking like a link for Gallery/Destination */
+/* Fix: Main items with dropdowns shouldn't look like clickable links */
 .nav-link.no-click { cursor: default; }
 
-/* Dropdown General */
-.dropdown-menu { display: none; position: absolute; top: 110%; left: 0; min-width: 210px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 0.5rem; z-index: 1100; border: 1px solid rgba(0,0,0,0.05); overflow: hidden; }
+/* Dropdown Menu - Improved Hover Area */
+.dropdown-menu { 
+  display: none; 
+  position: absolute; 
+  top: 100%; /* Move up to flush against nav bar */
+  left: 0; 
+  min-width: 210px; 
+  background: white; 
+  border-radius: 12px; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+  padding: 0.5rem; 
+  z-index: 1100; 
+  border: 1px solid rgba(0,0,0,0.05); 
+}
+
+/* Invisible bridge to prevent menu from closing when mouse moves between nav and menu */
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: transparent;
+}
+
 .nav-item-container:hover .dropdown-menu { display: block; }
+
 .dropdown-item { width: 100%; text-align: left; background: white; border: none; padding: 0.7rem 1rem; color: #374151; cursor: pointer; border-radius: 6px; transition: 0.2s; font-size: 0.95rem; }
 .dropdown-item:hover { background-color: #f0fdf4; color: #166534; }
 .active-sub { color: #166534; font-weight: 700; background: #dcfce7; }
 
-/* Language Selector Aesthetic */
+/* Language Selector */
 .language-selector { position: relative; margin-left: 1rem; }
 .lang-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 0.5rem 0.8rem; border-radius: 50px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; transition: 0.3s; }
 .lang-btn:hover { background: rgba(255, 255, 255, 0.2); border-color: #22c55e; }
@@ -133,9 +156,7 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
 .lang-option.selected { background: #f0fdf4; color: #22c55e; font-weight: 600; }
 .flag-icon { font-size: 1.2rem; }
 
-/* Custom Scrollbar for Lang Selector */
 .scrollbar-custom::-webkit-scrollbar { width: 5px; }
-.scrollbar-custom::-webkit-scrollbar-track { background: transparent; }
 .scrollbar-custom::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 10px; }
 
 /* Animations */
