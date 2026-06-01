@@ -57,12 +57,18 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
     
     <ul class="links">
       <li v-for="item in navItems" :key="item.id" class="nav-item-container">
-        <button @click="navigate(item.id)" :class="{ active: currentPage === item.id }" class="nav-link">
+        <!-- FIXED: Only call navigate() if there are NO children -->
+        <button 
+          @click="item.children ? null : navigate(item.id)" 
+          :class="{ active: currentPage === item.id, 'no-click': item.children }" 
+          class="nav-link"
+        >
           {{ item.label }} <span v-if="item.children" class="arrow">▾</span>
         </button>
         
         <ul v-if="item.children" class="dropdown-menu">
           <li v-for="child in item.children" :key="child.id">
+            <!-- Child links still navigate as normal -->
             <button @click.stop="navigate(child.id)" class="dropdown-item" :class="{ 'active-sub': currentPage === child.id }">
               {{ child.label }}
             </button>
@@ -104,6 +110,9 @@ onUnmounted(() => window.removeEventListener('click', closeLang))
 .nav-link { background: none; border: none; color: rgba(255, 255, 255, 0.9); cursor: pointer; padding: 0.6rem 1rem; border-radius: 8px; font-weight: 500; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
 .nav-link:hover { background-color: rgba(255, 255, 255, 0.1); color: white; }
 .nav-link.active { background-color: #22c55e; color: white; }
+
+/* FIXED: Prevent the mouse cursor from looking like a link for Gallery/Destination */
+.nav-link.no-click { cursor: default; }
 
 /* Dropdown General */
 .dropdown-menu { display: none; position: absolute; top: 110%; left: 0; min-width: 210px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 0.5rem; z-index: 1100; border: 1px solid rgba(0,0,0,0.05); overflow: hidden; }
