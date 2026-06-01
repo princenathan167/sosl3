@@ -22,7 +22,7 @@ const attractions = ref([
 </script>
 
 <template>
-  <main class="page bg-white rounded-lg shadow-lg p-8">
+  <div class="page bg-white rounded-lg shadow-lg p-8">
     <div class="header-section mb-8">
       <h1 class="text-4xl font-bold text-green-700 mb-4">Northern Province</h1>
       <p class="text-lg text-gray-800 leading-relaxed">
@@ -43,7 +43,7 @@ const attractions = ref([
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <style scoped>
